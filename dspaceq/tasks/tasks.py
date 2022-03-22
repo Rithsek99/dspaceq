@@ -397,7 +397,7 @@ def update_alma_url_field(args, notify=True):
         return status
 
 
-@task()
+@app.task()
 def update_datacatalog(args):
     """
     Adds ingested status into Data Catalog
@@ -414,7 +414,7 @@ def update_datacatalog(args):
     return "No items to update in data catalog"
 
 
-@task()
+@app.task()
 def remove_etd_catalog_record(id):
     """
     Removes the specified record from the etd digital catalog
@@ -441,7 +441,7 @@ def remove_etd_catalog_record(id):
         return {"error": "Record {0} not found"}
 
 
-@task()
+@app.task()
 def list_missing_metadata_etd(bag=""):
     """
     Displays missing metadata fields from Alma for specified bags
@@ -461,7 +461,7 @@ def list_missing_metadata_etd(bag=""):
     return check_missing([get_mmsid(bag) for bag in bags])
 
 
-@task()
+@app.task()
 def verify_good_bags(bag="", collection="",): #dspace_endpoint=REST_ENDPOINT):
     """
     Ingest a bagged thesis or dissertation into dspace
