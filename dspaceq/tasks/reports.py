@@ -1,4 +1,4 @@
-from celery.task import task
+from celery import Celery
 
 import logging
 import re
@@ -6,6 +6,7 @@ import re
 try:
     from celeryconfig import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, DB_PORT
     import celeryconfig
+    
 except ImportError:
     DB_USERNAME = DB_PASSWORD = DB_NAME = DB_HOST = DB_PORT = None
     celeryconfig = None
@@ -15,7 +16,7 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy import create_engine, text
 
 pg_db = {
-    'drivername': 'postgres',
+    'drivername': 'postgresql',
     'username': DB_USERNAME,
     'password': DB_PASSWORD,
     'database': DB_NAME,
@@ -69,7 +70,7 @@ ALTERNATIVE_TITLE = 65
 DEPARTMENT = 103
 
 
-@task()
+@app.task()
 def report_embargoed_items(beg_date, end_date, collections=None):
     """
     Report details regarding items coming out of embargo in the selected date range

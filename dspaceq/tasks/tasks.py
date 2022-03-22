@@ -5,7 +5,7 @@ from os.path import join, isfile
 from os import mkdir
 from subprocess import check_call, CalledProcessError, check_output, STDOUT
 
-from celery.task import task
+#from celery.task import task
 from celery import signature, group, Celery
 from inspect import cleandoc
 from collections import defaultdict
@@ -43,7 +43,7 @@ s3 = boto3.resource("s3")
 s3_bucket = 'ul-bagit'
 
 #Example task
-@task()
+@app.task()
 def add(x, y):
     """ Example task that adds two numbers or strings
         args: x and y
@@ -52,7 +52,7 @@ def add(x, y):
     result = x + y
     return result
 
-@task()
+@app.task()
 def dspace_ingest(bag_details, collection, notify_email="libir@ou.edu"):
     """ Generates temporary directory and url for the bags to be downloaded from
         S3, prior to ingest into DSpace, then performs the ingest
@@ -116,7 +116,7 @@ def dspace_ingest(bag_details, collection, notify_email="libir@ou.edu"):
     return({"success": {item[0]:"{0}{1}".format(DSPACE_FQDN, item[1]) for item in results}})
 
 
-@task()
+@app.task()
 def ingest_thesis_dissertation(bag="", collection="",): #dspace_endpoint=REST_ENDPOINT):
     """
     Ingest a bagged thesis or dissertation into dspace
@@ -233,7 +233,7 @@ def ingest_thesis_dissertation(bag="", collection="",): #dspace_endpoint=REST_EN
     return {"Kicked off ingest": good_bags, "failed": failed}
 
 
-@task()
+@app.task()
 def notify_etd_missing_fields():
     """
     Sends email to collections to notify of missing fields in Alma
@@ -279,7 +279,7 @@ def notify_etd_missing_fields():
     return "No Missing Details"
 
 
-@task()
+@app.task()
 def notify_dspace_etd_loaded(args):
     """
     Send email notifying repository group that new ETDs have been loaded into the repository
