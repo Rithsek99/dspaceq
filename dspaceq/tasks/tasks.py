@@ -345,7 +345,7 @@ def _update_alma_url_field(bib_record, url):
     return etree.tostring(tree, standalone="yes", encoding="UTF-8")
 
 
-@task()
+@app.task()
 def update_alma_url_field(args, notify=True):
     """
     Updates the Electronic location (tag 856) in Alma with the URL
