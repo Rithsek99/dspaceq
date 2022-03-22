@@ -11,6 +11,8 @@ except ImportError:
     DB_USERNAME = DB_PASSWORD = DB_NAME = DB_HOST = DB_PORT = None
     celeryconfig = None
 
+app = Celery()
+app.config_from_object(celeryconfig)
 import sqlalchemy
 from sqlalchemy.engine.url import URL
 from sqlalchemy import create_engine, text
